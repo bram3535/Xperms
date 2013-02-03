@@ -1,0 +1,24 @@
+groups:
+  Default:
+    default: true
+    prefix: '&a[default]'
+    suffix: '&f'
+    permissions:
+    - essentials.tpa
+  Mod:
+    prefix: '&b[Mod]'
+    suffix: '&f'
+    permissions:
+    - essentials.tp
+  Admin:
+    prefix: '&c[Admin]'
+    suffix: '&f'
+    inherit:
+    - moderator
+    permissions:
+    - essentials.*
+  Owner:
+    prefix: '&6[Owner]'
+    suffix: '&f'
+    permissions:
+    - '*'

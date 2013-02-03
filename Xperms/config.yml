@@ -1,0 +1,7 @@
+# Rank ladder lists, ordered from lowest rank to highest:
+ladders:
+  SampleLadder:
+  - Default
+  - Mod
+  - Admin
+  - Owner

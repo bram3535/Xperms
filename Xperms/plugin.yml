@@ -1,0 +1,16 @@
+name: Xperms
+version: 1.0.0
+description: Xperms plugin for Bukkit; Handling Permissions!
+load: POSTWORLD
+author: Sebc722
+main: com.github.sebc722.Xperms.Xmain
+database: false
+commands:
+  Xperms:
+    description: core command for Xperms
+    aliases: XP
+    usage: could not parse command! for help use '/xperms help' or '/xperms ?'
+permissions:
+  xperms.use:
+    description: Access to all of Xperms
+    default: op
