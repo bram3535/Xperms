@@ -1,9 +1,5 @@
 package com.github.sebc722.Xperms;
 
-/*
- * not reading groups properly
- */
-
 import java.util.HashMap;
 
 import org.bukkit.ChatColor;
@@ -21,11 +17,17 @@ public class Xmain extends JavaPlugin {
 	private Xyaml xusers = new Xyaml(this, this, "users.yml");
 	private Xpermissions xp = new Xpermissions(this, this);
 	private Xchat xch = new Xchat(this, this);
+	private Xplayer xpl = new Xplayer(this, this);
+	private Xgroup xgr = new Xgroup(this, this);
 	
 	private HashMap<String, PermissionAttachment> playerPerms = new HashMap<String, PermissionAttachment>();
 	
 	@Override
 	public void onEnable(){
+		doEnable();
+	}
+	
+	public void doEnable(){
 		registerListeners();
 		xperms.saveDefaultConfig();
 		xusers.saveDefaultConfig();
@@ -35,7 +37,11 @@ public class Xmain extends JavaPlugin {
 	
 	@Override
 	public void onDisable(){
-		xp.clearMap();
+		doDisable();
+	}
+	
+	public void doDisable(){
+		playerPerms.clear();
 		xperms.saveConfig();
 		xusers.saveConfig();
 	}
@@ -56,6 +62,17 @@ public class Xmain extends JavaPlugin {
 		if(xperms.getDefaultGroup() == null){
 			getLogger().severe("No default group is defined! Xperms will NOT function properly!");
 		}
+		if(checkForPlayers()){
+			getLogger().info("Reload detected, updating all user permissions!");
+			getXpermissions().updatePermissions("all");
+		}
+	}
+	
+	private boolean checkForPlayers(){
+		if(getServer().getOnlinePlayers() == null){
+			return true;
+		}
+		return false;
 	}
 	
 	private void registerListeners(){
@@ -95,6 +112,14 @@ public class Xmain extends JavaPlugin {
 	 */
 	public Xpermissions getXpermissions(){
 		return xp;
+	}
+	
+	public Xplayer getXplayer(){
+		return xpl;
+	}
+	
+	public Xgroup getXgroup(){
+		return xgr;
 	}
 	
 	/*

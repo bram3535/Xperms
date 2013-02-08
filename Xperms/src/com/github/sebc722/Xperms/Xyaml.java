@@ -111,8 +111,7 @@ public class Xyaml {
 	public String[] getGroups(){
 		String[] groups = null;
 		List<String> listOfGroups = new ArrayList<String>();
-		ConfigurationSection section = getConfig().getConfigurationSection("groups");		
-		
+		ConfigurationSection section = getConfig().getConfigurationSection("groups");
 		if(section == null){
 			return null;
 		}
@@ -120,10 +119,25 @@ public class Xyaml {
 		for(String Node : section.getKeys(false)){
 			listOfGroups.add(Node.toString());
 		}
-		
 		groups = listOfGroups.toArray(new String[0]);
 		
 		return groups;
+	}
+	
+	public String[] getUsers(){
+		String[] Users;
+		List<String> listOfUsers = new ArrayList<String>();
+		ConfigurationSection section = getConfig().getConfigurationSection("users");
+		if(section == null){
+			return null;
+		}
+		
+		for(String Node : section.getKeys(false)){
+			listOfUsers.add(Node.toString());
+		}
+		Users = listOfUsers.toArray(new String[0]);
+		
+		return Users;
 	}
 	
 	/*
