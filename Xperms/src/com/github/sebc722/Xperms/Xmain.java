@@ -42,8 +42,6 @@ public class Xmain extends JavaPlugin {
 	
 	public void doDisable(){
 		playerPerms.clear();
-		xperms.saveConfig();
-		xusers.saveConfig();
 	}
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
@@ -52,10 +50,17 @@ public class Xmain extends JavaPlugin {
 				sender.sendMessage(ChatColor.RED + "You do not have permission to use this.");
 				return true;
 			}
+			reloadAll();
 			xc.mainExecutor(sender, cmd, label, args);
 			return true;
 		}
 		return false;
+	}
+	
+	public void reloadAll(){
+		getXperms().reloadConfig();
+		getXusers().reloadConfig();
+		reloadConfig();
 	}
 	
 	private void InitialCheck(){
@@ -70,9 +75,9 @@ public class Xmain extends JavaPlugin {
 	
 	private boolean checkForPlayers(){
 		if(getServer().getOnlinePlayers() == null){
-			return true;
+			return false;
 		}
-		return false;
+		return true;
 	}
 	
 	private void registerListeners(){
