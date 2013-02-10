@@ -69,8 +69,8 @@ public class Xyaml {
 	/*
 	 * Save default config from resources
 	 */
-	public void saveDefaultConfig(){
-		xm.saveResource(FileName, false);
+	public void saveDefaultConfig(boolean overwrite){
+		xm.saveResource(FileName, overwrite);
 	}
 
 	/*

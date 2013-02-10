@@ -40,6 +40,10 @@ public class Xpermissions {
 		for(int i = 0; i < inherit.length; i++){
 			setPermissionNodes(getPermissionNodes(inherit[i]), attachment, player);
 		}
+		
+		if(xm.getXperms().getConfig().isSet("groups." + playerGroup + ".inherit")){
+			setInheritedPermissions(playerGroup, attachment, player);
+		}
 	}
 	
 	public void resetAttachment(String PlayerName){

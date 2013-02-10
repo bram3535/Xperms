@@ -29,8 +29,8 @@ public class Xmain extends JavaPlugin {
 	
 	public void doEnable(){
 		registerListeners();
-		xperms.saveDefaultConfig();
-		xusers.saveDefaultConfig();
+		xperms.saveDefaultConfig(false);
+		xusers.saveDefaultConfig(false);
 		saveDefaultConfig();
 		InitialCheck();
 	}
@@ -82,6 +82,18 @@ public class Xmain extends JavaPlugin {
 	
 	private void registerListeners(){
 		getServer().getPluginManager().registerEvents(new Xlisteners(this, this), this);
+	}
+	
+	public void resetConfigs(){
+		getXusers().saveDefaultConfig(true);
+		getXperms().saveDefaultConfig(true);
+		saveResource("config.yml", true);
+	}
+	
+	public void reload(){
+		reloadAll();
+		getXpermissions().updatePermissions("all");
+		getLogger().info("Xperms reloaded");
 	}
 	
 	/*

@@ -80,6 +80,14 @@ public class Xcommands {
 			}
 			demoteCommand(sender, cmd, args);
 			break;
+		case "reload":
+			xm.reload();
+			sender.sendMessage(ChatColor.DARK_PURPLE + "Xperms reloaded!");
+			break;
+		case "reset":
+			xm.resetConfigs();
+			sender.sendMessage(ChatColor.DARK_PURPLE + "Configuration files reset!");
+			break;
 		case "help":
 			displayOptions(sender);
 			break;
@@ -130,6 +138,12 @@ public class Xcommands {
 				sender.sendMessage(ChatColor.DARK_PURPLE + "The group " + Fourth + " does not appear to exist!");
 			}
 			break;
+		case "permission":
+			Third = args[2];
+			Fourth = args[3];
+			xm.getXgroup().addPermission(Fourth, Third);
+			sender.sendMessage(ChatColor.DARK_PURPLE + "Permission node " + Third + " was added to " + Fourth);
+			break;
 		default:
 			if(xm.getServer().getPlayer(Second) != null || xm.getServer().getOfflinePlayer(Second) != null){
 				if(xm.getXperms().getConfig().isSet("groups." + Third)){
@@ -150,7 +164,7 @@ public class Xcommands {
 	}
 	
 	private void removeCommand(CommandSender sender, Command cmd, String[] args){
-		String Second, Fourth;
+		String Second, Third, Fourth;
 		Second = args[1];
 		switch(Second.toLowerCase()){
 		case "prefix":
@@ -174,6 +188,12 @@ public class Xcommands {
 			else{
 				sender.sendMessage(ChatColor.DARK_PURPLE + "The group " + Fourth + " does not have a defined suffix!");
 			}
+			break;
+		case "permission":
+			Third = args[2];
+			Fourth = args[3];
+			xm.getXgroup().removePermission(Fourth, Third);
+			sender.sendMessage(ChatColor.DARK_PURPLE + "Permission node " + Third + " was added to " + Fourth);
 			break;
 		default:
 			if(xm.getServer().getPlayer(Second) != null || xm.getServer().getOfflinePlayer(Second) != null){
@@ -307,7 +327,7 @@ public class Xcommands {
 	}
 	
 	private void displayOptions(CommandSender sender){
-		String[] options = new String[13];
+		String[] options = new String[19];
 		options[0] = "Try one of these:";
 		options[1] = ChatColor.DARK_PURPLE + "/xperms [add|remove] <user> <group>";
 		options[2] = ChatColor.RED + "- Add or Remove <user> to/from <group>";
@@ -316,11 +336,17 @@ public class Xcommands {
 		options[5] = ChatColor.DARK_PURPLE + "/xperms [add|remove] suffix <suffix> <group>";
 		options[6] = ChatColor.RED + "- Add or Remove <suffix> to/from <group>";
 		options[7] = ChatColor.DARK_PURPLE + "/xperms [create|delete] <group>";
-		options[8] = ChatColor.RED + "Create or Delete <group>";
+		options[8] = ChatColor.RED + "- Create or Delete <group>";
 		options[9] = ChatColor.DARK_PURPLE + "/xperms [promote|demote] <user> <ladder>";
-		options[10] = ChatColor.RED + "Promote or Demote <user> along <ladder>";
+		options[10] = ChatColor.RED + "- Promote or Demote <user> along <ladder>";
 		options[11] = ChatColor.DARK_PURPLE + "/xperms <group> inherits <group> [true|false]";
-		options[12] = ChatColor.RED + "set <group> to or not to inherit <group>";
+		options[12] = ChatColor.RED + "- set <group> to or not to inherit <group>";
+		options[13] = ChatColor.DARK_PURPLE + "/xperms [add|remove] permission <permission node> <group>";
+		options[14] = ChatColor.RED + "- Add or Remove <permission node> to/from <group>";
+		options[15] = ChatColor.DARK_PURPLE + "/xperms reload";
+		options[16] = ChatColor.RED + "- reloads Xperms";
+		options[17] = ChatColor.DARK_PURPLE + "/xperms reset";
+		options[18] = ChatColor.RED + "- " + ChatColor.BOLD + "Warning: " + ChatColor.RESET + "This resets ALL config files";
 		
 		sender.sendMessage(options);
 	}

@@ -8,13 +8,15 @@ groups:
   Mod:
     prefix: '&b[Mod]'
     suffix: '&f'
+    inherit:
+    - Default
     permissions:
     - essentials.tp
   Admin:
     prefix: '&c[Admin]'
     suffix: '&f'
     inherit:
-    - moderator
+    - Mod
     permissions:
     - essentials.*
   Owner:
