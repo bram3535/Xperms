@@ -33,6 +33,13 @@ public class Xmain extends JavaPlugin {
 		xusers.saveDefaultConfig(false);
 		saveDefaultConfig();
 		InitialCheck();
+		if(getConfigVersion() < 1.5){
+			reloadConfig();
+			getConfig().set("SaveUsersOnJoin", true);
+			getConfig().set("ConfigVersion", 1.5);
+			saveConfig();
+			getLogger().info("Config updated to 1.5!");
+		}
 	}
 	
 	@Override
@@ -48,6 +55,16 @@ public class Xmain extends JavaPlugin {
 		if(cmd.getName().equalsIgnoreCase("xperms") || cmd.getName().equalsIgnoreCase("xp")){
 			if(!sender.hasPermission("xperms.use")){
 				sender.sendMessage(ChatColor.RED + "You do not have permission to use this.");
+				return true;
+			}
+			if(args[0].equalsIgnoreCase("reload")){
+				reload();
+				sender.sendMessage(ChatColor.DARK_PURPLE + "Xperms reloaded!");
+				return true;
+			}
+			if(args[0].equalsIgnoreCase("reset")){
+				resetConfigs();
+				sender.sendMessage(ChatColor.DARK_PURPLE + "All config files are reset!");
 				return true;
 			}
 			reloadAll();
@@ -82,6 +99,18 @@ public class Xmain extends JavaPlugin {
 	
 	private void registerListeners(){
 		getServer().getPluginManager().registerEvents(new Xlisteners(this, this), this);
+	}
+	
+	private double getConfigVersion(){
+		Double version;
+		
+		if(!getConfig().isSet("ConfigVersion")){
+			return 0;
+		}
+		
+		version = getConfig().getDouble("ConfigVersion");
+		
+		return version;
 	}
 	
 	public void resetConfigs(){

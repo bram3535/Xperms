@@ -121,6 +121,7 @@ public class Xcommands {
 			if(xm.getXperms().getConfig().isSet("groups." + Fourth)){
 				xm.getXperms().getConfig().set("groups." + Fourth + ".prefix", Third);
 				xm.getXperms().saveConfig();
+				xm.getXpermissions().updatePermissions(Fourth);
 				sender.sendMessage(ChatColor.DARK_PURPLE + "The prefix " + Third + " has been added to " + Fourth);
 			}
 			else{
@@ -132,6 +133,7 @@ public class Xcommands {
 			if(xm.getXperms().getConfig().isSet("groups." + Fourth)){
 				xm.getXperms().getConfig().set("groups." + Fourth + ".suffix", Third);
 				xm.getXperms().saveConfig();
+				xm.getXpermissions().updatePermissions(Fourth);
 				sender.sendMessage(ChatColor.DARK_PURPLE + "The suffix " + Third + " has been added to " + Fourth);
 			}
 			else{
@@ -172,6 +174,7 @@ public class Xcommands {
 			if(xm.getXperms().getConfig().isSet("groups." + Fourth + ".prefix")){
 				xm.getXperms().getConfig().set("groups." + Fourth + ".prefix", null);
 				xm.getXperms().saveConfig();
+				xm.getXpermissions().updatePermissions(Fourth);
 				sender.sendMessage(ChatColor.DARK_PURPLE + "The group " + Fourth + " no longer has a prefix");
 			}
 			else{
@@ -183,6 +186,7 @@ public class Xcommands {
 			if(xm.getXperms().getConfig().isSet("groups." + Fourth + ".suffix")){
 				xm.getXperms().getConfig().set("groups." + Fourth + ".suffix", null);
 				xm.getXperms().saveConfig();
+				xm.getXpermissions().updatePermissions(Fourth);
 				sender.sendMessage(ChatColor.DARK_PURPLE + "The group " + Fourth + " no longer has a suffix");
 			}
 			else{

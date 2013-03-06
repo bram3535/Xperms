@@ -1,3 +1,6 @@
+# Should Xperms save new users to users.yml when they join?
+SaveUsersOnJoin: true
+
 # Rank ladder lists, ordered from lowest rank to highest:
 ladders:
   SampleLadder:
@@ -5,3 +8,6 @@ ladders:
   - Mod
   - Admin
   - Owner
+
+# Don't touch this. Seriously. It will break things.
+ConfigVersion: 1.5

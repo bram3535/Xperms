@@ -151,7 +151,7 @@ public class Xyaml {
 			userGroup = getConfig().getString("users." + playerName + ".group");
 		}
 		else{
-			userGroup = getDefaultGroup();
+			userGroup = xm.getXperms().getDefaultGroup();
 		}
 		return userGroup;
 	}

@@ -39,10 +39,10 @@ public class Xpermissions {
 		
 		for(int i = 0; i < inherit.length; i++){
 			setPermissionNodes(getPermissionNodes(inherit[i]), attachment, player);
-		}
-		
-		if(xm.getXperms().getConfig().isSet("groups." + playerGroup + ".inherit")){
-			setInheritedPermissions(playerGroup, attachment, player);
+			
+			if(xm.getXperms().getConfig().isSet("groups." + inherit[i] + ".inherit")){
+				setInheritedPermissions(inherit[i], attachment, player);
+			}
 		}
 	}
 	

@@ -22,7 +22,15 @@ public class Xlisteners implements Listener {
 			xm.getXpermissions().setPermissions(event.getPlayer().getName(), event.getPlayer());
 			return;
 		}
-		xm.getXusers().getConfig().set("users." + event.getPlayer().getName() + ".group", xm.getXperms().getDefaultGroup());
+		if(xm.getConfig().getBoolean("SaveUsersOnJoin") || xm.getConfig().getString("SaveUsersOnJoin").equalsIgnoreCase("true")){
+			xm.getXusers().reloadConfig();
+			xm.getXusers().getConfig().set("users." + event.getPlayer().getName() + ".group", xm.getXperms().getDefaultGroup());
+			xm.getXusers().saveConfig();
+		}
+		else{
+			xm.getXusers().reloadConfig();
+			xm.getXusers().getConfig().set("users." + event.getPlayer().getName() + ".group", xm.getXperms().getDefaultGroup());
+		}
 		xm.getXpermissions().setPermissions(event.getPlayer().getName(), event.getPlayer());
 	}
 	
