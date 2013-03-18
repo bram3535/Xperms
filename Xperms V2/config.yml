@@ -10,4 +10,4 @@ ladders:
   - Owner
 
 # Don't touch this. Seriously. It will break things.
-ConfigVersion: 1.5
+ConfigVersion: 2.0

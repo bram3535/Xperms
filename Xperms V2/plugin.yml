@@ -1,9 +1,9 @@
 name: Xperms
-version: 1.5
+version: 2.0
 description: Xperms plugin for Bukkit; Handling Permissions!
 load: POSTWORLD
 author: Sebc722
-main: com.github.sebc722.Xperms.Xmain
+main: com.github.sebc722.xperms.core.Main
 database: false
 commands:
   Xperms:

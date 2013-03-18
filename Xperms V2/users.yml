@@ -1,0 +1,5 @@
+FileVersion: 2.0
+users:
+  SomePlayer:
+    world: Admin
+    world_nether: NetherDefault

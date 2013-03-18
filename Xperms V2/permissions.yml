@@ -1,8 +1,21 @@
 groups:
   Default:
     default: true
-    prefix: '&a[default]'
+    prefix: '&a[Default]'
     suffix: '&f'
+    permissions:
+    - essentials.tpa
+  NetherDefault:
+    default: world_nether
+    prefix: '&4[Nether-Default]'
+    suffix: '&f'
+    permissions:
+    - essentials.tpa
+  WorldSpecificGroup:
+    prefix: '&3[world only group]'
+    suffix: '&f'
+    worlds:
+    - world
     permissions:
     - essentials.tpa
   Mod:
