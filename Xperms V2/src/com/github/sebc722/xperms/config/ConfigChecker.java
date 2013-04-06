@@ -8,7 +8,7 @@ public class ConfigChecker {
 	
 	public ConfigChecker(Main main){
 		xm = main;
-		currentVersion = 2.0;
+		currentVersion = Double.parseDouble(xm.getDescription().getVersion());
 	}
 	
 	public void checkConfigFiles(){
@@ -21,6 +21,9 @@ public class ConfigChecker {
 	}
 	
 	private boolean isConfigUpToDate(){
+		if(!xm.getConfig().isSet("ConfigVersion")){
+			return false;
+		}
 		if(xm.getConfig().getDouble("ConfigVersion") < currentVersion){
 			return false;
 		}
@@ -46,6 +49,19 @@ public class ConfigChecker {
 		if(!xm.getConfig().isSet("ConfigVersion")){
 			xm.getConfig().set("ConfigVersion", currentVersion);
 		}
+		if(!xm.getConfig().isSet("CheckUpdate")){
+			if(!xm.getConfig().isSet("CheckUpdate.OnStart")){
+				xm.getConfig().set("CheckUpdate.OnStart", "true");
+			}
+			if(!xm.getConfig().isSet("CheckUpdate.OnJoin")){
+				xm.getConfig().set("CheckUpdate.OnJoin", "true");
+			}
+		}
+		if(xm.getConfig().isSet("CheckUpdate.Onjoin")){
+			xm.getConfig().set("CheckUpdate.Onjoin", null);
+			xm.getConfig().set("CheckUpdate.OnJoin", "true");
+		}
+		xm.saveConfig();
 	}
 	
 	private void updateUsers(){

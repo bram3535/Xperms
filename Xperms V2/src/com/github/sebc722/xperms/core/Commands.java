@@ -1,11 +1,18 @@
 package com.github.sebc722.xperms.core;
 
+/*
+ * Commands Added:
+ * - Add/remove prefix/suffix to/from player
+ * - Add/remove node to/from player
+ */
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class Commands {
 	private Main xm;
@@ -60,22 +67,31 @@ public class Commands {
 		}
 		if(key.equalsIgnoreCase("reload")){
 			xm.reloadAll();
+			sender.sendMessage(Green + "Xperms has been reloaded");
 			return;
 		}
 		if(key.equalsIgnoreCase("reset")){
 			xm.resetAll();
+			sender.sendMessage(Green + "Xperms files have been reset");
 			return;
 		}
 		if(key.equalsIgnoreCase("check")){
 			boolean update = new UpdateChecker(xm).Check();
 			if(update){
-				sender.sendMessage(ChatColor.DARK_GRAY + "An update is available for Xperms! download it here: " + ChatColor.GREEN + WebsiteURL);
+				sender.sendMessage(DarkGrey + "An update is available for Xperms! download it here: " + ChatColor.GREEN + WebsiteURL);
 			}
+			sender.sendMessage(DarkGrey + "No update is available at this time");
 			return;
 		}
-		if(!key.equalsIgnoreCase("help") || !key.equals("?")){
-			sender.sendMessage(DarkGrey + "Strange argument provided: " + Red + key);
+		if(key.equalsIgnoreCase("help")){
+			sendHelp(sender);
+			return;
 		}
+		if(key.equals("?")){
+			sendHelp(sender);
+			return;
+		}
+		sender.sendMessage(DarkGrey + "Strange argument provided: " + Red + key);
 		sendHelp(sender);
 	}
 	
@@ -174,7 +190,23 @@ public class Commands {
 					sender.sendMessage(Green + Third + DarkGrey + " is now " + Green + Fourth + DarkGrey + "'s prefix");
 				}
 				else{
-					sender.sendMessage(Red + Fourth + DarkGrey + " does not appear to exist");
+					if(xm.playerExists(Fourth)){
+						xm.getUsers().get().set("users." + Fourth + ".prefix", Third);
+						xm.getUsers().save();
+						Player player;
+						try{
+							player = xm.getServer().getPlayer(Fourth);
+						} catch(NullPointerException e){
+							sender.sendMessage(Green + Third + DarkGrey + " is now " + Green + Fourth + DarkGrey + "'s prefix");
+							return;
+						}
+						
+						xm.getXpermissions().updatePermissions(player);
+						sender.sendMessage(Green + Third + DarkGrey + " is now " + Green + Fourth + DarkGrey + "'s prefix");
+					}
+					else{
+						sender.sendMessage(Red + Fourth + DarkGrey + " does not appear to exist");
+					}
 				}
 			}
 		}
@@ -194,7 +226,23 @@ public class Commands {
 					sender.sendMessage(Green + Third + DarkGrey + " is now " + Green + Fourth + DarkGrey + "'s suffix");
 				}
 				else{
-					sender.sendMessage(Red + Fourth + DarkGrey + " does not appear to exist");
+					if(xm.playerExists(Fourth)){
+						xm.getUsers().get().set("users." + Fourth + ".suffix", Third);
+						xm.getUsers().save();
+						Player player;
+						try{
+							player = xm.getServer().getPlayer(Fourth);
+						} catch(NullPointerException e){
+							sender.sendMessage(Green + Third + DarkGrey + " is now " + Green + Fourth + DarkGrey + "'s suffix");
+							return;
+						}
+						
+						xm.getXpermissions().updatePermissions(player);
+						sender.sendMessage(Green + Third + DarkGrey + " is now " + Green + Fourth + DarkGrey + "'s suffix");
+					}
+					else{
+						sender.sendMessage(Red + Fourth + DarkGrey + " does not appear to exist");
+					}
 				}
 			}
 		}
@@ -213,7 +261,21 @@ public class Commands {
 					sender.sendMessage(Green + Third + DarkGrey + " has been added to " + Green + Fourth);
 				}
 				else{
-					sender.sendMessage(Red + Fourth + DarkGrey + " does not appear to exist");
+					if(xm.playerExists(Fourth)){
+						xm.getXplayer().addNode("", Fourth, Third);
+						Player player;
+						try{
+							player = xm.getServer().getPlayer(Fourth);
+						} catch(NullPointerException e){
+							sender.sendMessage(Green + Third + DarkGrey + " has been given to " + Green + Fourth);
+							return;
+						}
+						sender.sendMessage(Green + Third + DarkGrey + " has been given to " + Green + Fourth);
+						xm.getXpermissions().updatePermissions(player);
+					}
+					else{
+						sender.sendMessage(Red + Fourth + DarkGrey + " does not appear to exist");
+					}
 				}
 			}
 		}
@@ -332,7 +394,23 @@ public class Commands {
 					sender.sendMessage(Green + Fourth + DarkGrey + " no longer has a prefix");
 				}
 				else{
-					sender.sendMessage(Red + Fourth + DarkGrey + " does not appear to exist");
+					if(xm.playerExists(Fourth)){
+						xm.getUsers().get().set("users." + Fourth + ".prefix", null);
+						xm.getUsers().save();
+						Player player;
+						try{
+							player = xm.getServer().getPlayer(Fourth);
+						} catch(NullPointerException e){
+							sender.sendMessage(Green + Fourth + DarkGrey + " no longer has a prefix");
+							return;
+						}
+						
+						xm.getXpermissions().updatePermissions(player);
+						sender.sendMessage(Green + Fourth + DarkGrey + " no longer has a prefix");
+					}
+					else{
+						sender.sendMessage(Red + Fourth + DarkGrey + " does not appear to exist");
+					}
 				}
 			}
 		}
@@ -351,7 +429,23 @@ public class Commands {
 					sender.sendMessage(Green + Fourth + DarkGrey + " no longer has a suffix");
 				}
 				else{
-					sender.sendMessage(Red + Fourth + DarkGrey + " does not appear to exist");
+					if(xm.playerExists(Fourth)){
+						xm.getUsers().get().set("users." + Fourth + ".suffix", null);
+						xm.getUsers().save();
+						Player player;
+						try{
+							player = xm.getServer().getPlayer(Fourth);
+						} catch(NullPointerException e){
+							sender.sendMessage(Green + Fourth + DarkGrey + " no longer has a suffix");
+							return;
+						}
+						
+						xm.getXpermissions().updatePermissions(player);
+						sender.sendMessage(Green + Fourth + DarkGrey + " no longer has a suffix");
+					}
+					else{
+						sender.sendMessage(Red + Fourth + DarkGrey + " does not appear to exist");
+					}
 				}
 			}
 		}
@@ -370,7 +464,21 @@ public class Commands {
 					sender.sendMessage(Green + Fourth + DarkGrey + " no longer has the node " + Green + Third);
 				}
 				else{
-					sender.sendMessage(Red + Fourth + DarkGrey + " does not appear to exist");
+					if(xm.playerExists(Fourth)){
+						xm.getXplayer().removeNode("", Fourth, Third);
+						Player player;
+						try{
+							player = xm.getServer().getPlayer(Fourth);
+						} catch(NullPointerException e){
+							sender.sendMessage(Green + Third + DarkGrey + " has been removed from " + Green + Fourth);
+							return;
+						}
+						sender.sendMessage(Green + Third + DarkGrey + " has been removed from " + Green + Fourth);
+						xm.getXpermissions().updatePermissions(player);
+					}
+					else{
+						sender.sendMessage(Red + Fourth + DarkGrey + " does not appear to exist");
+					}
 				}
 			}
 		}
@@ -592,12 +700,12 @@ public class Commands {
 		
 		help.add(itemDiv);
 		
-		help.add(Purple + "/xperms [add|remove] [prefix|suffix] <Prefix Text|Suffix Text> <Group Name>");
+		help.add(Purple + "/xperms [add|remove] [prefix|suffix] <Prefix Text|Suffix Text> <Group/Player Name>");
 		help.add(DarkGrey + " - add or remove a prefix or suffix to/from a group");
 		
 		help.add(itemDiv);
 		
-		help.add(Purple + "/xperms [add|remove] permission <Permission Node> <Group Name>");
+		help.add(Purple + "/xperms [add|remove] permission <Permission Node> <Group/Player Name>");
 		help.add(DarkGrey + " - add or remove a permission node to/from a group");
 		
 		help.add(itemDiv);

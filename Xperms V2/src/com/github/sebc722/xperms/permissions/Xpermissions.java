@@ -24,18 +24,23 @@ public class Xpermissions {
 		}
 		
 		PermissionAttachment attachment = player.addAttachment(xm);
-		String[] Nodes = getNodes(playerGroup);
-		
-		setNodes(Nodes, attachment, player);
-		
-		if(!inherits(playerGroup)){
-			storeAttachment(player, attachment, playerGroup);
-			xc.setDisplayName(player, playerGroup);
-			return;
+		if(inherits(playerGroup)){
+			setInheritedPermissions(player, attachment, playerGroup);
 		}
-		setInheritedPermissions(player, attachment, playerGroup);
+		
+		setGroupPermissions(player, playerGroup, attachment);
+		
+		if(playerHasPermissions(player.getName())){
+			setPlayerPermissions(player, attachment);
+		}
+		
 		storeAttachment(player, attachment, playerGroup);
 		xc.setDisplayName(player, playerGroup);
+	}
+	
+	public void setGroupPermissions(Player player, String playerGroup, PermissionAttachment attachment){
+		String[] Nodes = getNodes(playerGroup);
+		setNodes(Nodes, attachment, player);
 	}
 	
 	public void setInheritedPermissions(Player player, PermissionAttachment attachment, String playerGroup){
@@ -49,6 +54,11 @@ public class Xpermissions {
 				setInheritedPermissions(player, attachment, inherited[i]);
 			}
 		}
+	}
+	
+	public void setPlayerPermissions(Player player, PermissionAttachment attachment){
+		String[] Nodes = xm.getXplayer().getNodes(player.getName());
+		setNodes(Nodes, attachment, player);
 	}
 	
 	public void updatePermissions(Player player){
@@ -168,6 +178,13 @@ public class Xpermissions {
 		return false;
 	}
 	
+	private boolean playerHasPermissions(String playerName){
+		if(xm.getUsers().get().isSet("users." + playerName + ".permissions")){
+			return true;
+		}
+		return false;
+	}
+	
 	private String[] getInherited(String groupName){
 		String[] groupsInherited;
 		groupsInherited = xm.getPermissions().get().getStringList("groups." + groupName + ".inherit").toArray(new String[0]);
@@ -175,7 +192,7 @@ public class Xpermissions {
 	}
 	
 	public String[] getLadder(String ladderName){
-		String[] groupsOnLadder = xm.getConfig().getStringList("").toArray(new String[0]);
+		String[] groupsOnLadder = xm.getConfig().getStringList("ladders." + ladderName).toArray(new String[0]);
 		return groupsOnLadder;
 	}
 }

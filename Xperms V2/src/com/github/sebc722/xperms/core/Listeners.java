@@ -44,6 +44,9 @@ public class Listeners implements Listener{
 		}
 		
 		if(player.hasPermission("xperms.use")){
+			if(!xm.allowedChecking("OnJoin")){
+				return;
+			}
 			boolean update = new UpdateChecker(xm).Check();
 			if(update){
 				player.sendMessage(ChatColor.DARK_GRAY + "An update is available for Xperms! download it here: " + ChatColor.GREEN + WebsiteURL);

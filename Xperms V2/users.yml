@@ -1,5 +1,9 @@
-FileVersion: 2.0
+FileVersion: 2.2
 users:
   SomePlayer:
     world: Admin
     world_nether: NetherDefault
+    prefix: '&a[SomePlayer]'
+    suffix: '&f'
+    permissions:
+    - some.player.permission

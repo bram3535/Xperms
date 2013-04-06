@@ -13,10 +13,17 @@ public class Xchat {
 	}
 	
 	public void setDisplayName(Player player, String playerGroup){
-		String Prefix, Suffix, DisplayName, Key;
+		String Prefix, Suffix, DisplayName = null, Key;
 		
 		Prefix = xm.getPermissions().get().getString("groups." + playerGroup + ".prefix");
 		Suffix = xm.getPermissions().get().getString("groups." + playerGroup + ".suffix");
+		if(xm.getXplayer().hasPrefix(player.getName())){
+			Prefix = xm.getXplayer().getPrefix(player.getName());
+		}
+		if(xm.getXplayer().hasSuffix(player.getName())){
+			Suffix = xm.getXplayer().getSuffix(player.getName());
+		}
+		
 		Key = "&";
 		
 		if(notNull(Prefix)){
@@ -24,21 +31,20 @@ public class Xchat {
 			if(notNull(Suffix)){
 				Suffix = ChatColor.translateAlternateColorCodes(Key.charAt(0), Suffix);
 				DisplayName = Prefix + player.getName() + Suffix;
-				player.setDisplayName(DisplayName);
-				return;
 			}
-			DisplayName = Prefix + player.getName();
-			player.setDisplayName(DisplayName);
-			return;
+			else{
+				DisplayName = Prefix + player.getName();
+			}
 		}
 		else{
 			if(notNull(Suffix)){
 				Suffix = ChatColor.translateAlternateColorCodes(Key.charAt(0), Suffix);
 				DisplayName = player.getName() + Suffix;
-				player.setDisplayName(DisplayName);
-				return;
 			}
-			return;
+		}
+		
+		if(notNull(DisplayName)){
+			player.setDisplayName(DisplayName);
 		}
 	}
 	

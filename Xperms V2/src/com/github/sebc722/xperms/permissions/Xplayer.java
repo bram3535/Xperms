@@ -20,12 +20,7 @@ public class Xplayer {
 			playerGroup = xm.getUsers().get().getString("users." + playerName + "." + world);
 		}
 		else{
-			if(xm.getUsers().get().isSet("users." + playerName + ".global")){
-				playerGroup = xm.getUsers().get().getString("users." + playerName + ".global");
-			}
-			else{
-				playerGroup = xm.getXgroup().getDefault(world);
-			}
+			playerGroup = xm.getXgroup().getDefault(world);
 		}
 		
 		return playerGroup;
@@ -81,19 +76,6 @@ public class Xplayer {
 		return group;
 	}
 	
-	public boolean hasGlobalGroup(String player){
-		if(xm.getUsers().get().isSet("users." + player + ".global")){
-			return true;
-		}
-		return false;
-	}
-	
-	public String getGlobalGroup(String player){
-		String group = null;
-		group = xm.getUsers().get().getString("users." + player + ".gloal");
-		return group;
-	}
-	
 	public boolean isOfflinePlayer(String playerName){
 		if(xm.playerExists(playerName)){
 			if(!xm.getServer().getPlayer(playerName).isOnline()){
@@ -104,35 +86,76 @@ public class Xplayer {
 	}
 	
 	public boolean hasPerm(String world, String playerName, String node){
-		if(world == null || playerName == null || node == null){
+		if(playerName == null || node == null){
 			return false;
 		}
 		
-		String groupName = getGroup(playerName, world);
-		if(xm.getXpermissions().containsString(xm.getXpermissions().getNodes(groupName), node)){
+		if(xm.getXpermissions().containsString(getNodes(playerName), node)){
 			return true;
 		}
+		
 		return false;
 	}
 	
 	public boolean addNode(String world, String playerName, String node){
-		if(world == null || playerName == null || node == null){
+		if(playerName == null || node == null){
 			return false;
 		}
+		ArrayList<String> list = new ArrayList<String>();
 		
-		String groupName = getGroup(playerName, world);
-		xm.getXpermissions().addNode(groupName, node);
+		if(!xm.getUsers().get().isSet("users." + playerName + ".permissions")){
+			list.add(node);
+			xm.getUsers().get().set("users." + playerName + ".permissions", list);
+		}
+		else{
+			if(!xm.getXpermissions().containsString(getNodes(playerName), node)){
+				String[] Nodes = getNodes(playerName);
+				
+				for(int i = 0; i < Nodes.length; i++){
+					list.add(node);
+				}
+				list.add(node);
+				xm.getUsers().get().set("users." + playerName + ".permissions", list);
+			}
+		}
+		xm.getUsers().save();
 		return true;
 	}
 	
 	public boolean removeNode(String world, String playerName, String node){
-		if(world == null || playerName == null || node == null){
+		if(playerName == null || node == null){
 			return false;
 		}
+		ArrayList<String> list = new ArrayList<String>();
 		
-		String groupName = getGroup(playerName, world);
-		xm.getXpermissions().removeNode(groupName, node);
+		if(!xm.getUsers().get().isSet("users." + playerName + ".permissions")){
+			return true;
+		}
+		else{
+			if(xm.getXpermissions().containsString(getNodes(playerName), node)){
+				String[] Nodes = getNodes(playerName);
+				
+				for(int i = 0; i < Nodes.length; i++){
+					if(!Nodes[i].equalsIgnoreCase(node)){
+						list.add(Nodes[i]);
+					}
+				}
+				
+				xm.getUsers().get().set("users." + playerName + ".permissions", list);
+			}
+		}
+		xm.getUsers().save();
 		return true;
+	}
+	
+	public String[] getNodes(String playerName){
+		if(!xm.getUsers().get().isSet("users." + playerName + ".permissions")){
+			return null;
+		}
+		
+		String[] Nodes;
+		Nodes = xm.getUsers().get().getStringList("users." + playerName + ".permissions").toArray(new String[0]);
+		return Nodes;
 	}
 	
 	public String[] getPlayerGroups(String playerName){
@@ -185,5 +208,37 @@ public class Xplayer {
 		
 		
 		return true;
+	}
+	
+	public boolean hasPrefix(String playerName){
+		if(xm.getUsers().get().isSet("users." + playerName + ".prefix")){
+			return true;
+		}
+		return false;
+	}
+	
+	public String getPrefix(String playerName){
+		if(!hasPrefix(playerName)){
+			return null;
+		}
+		String prefix;
+		prefix = xm.getUsers().get().getString("users." + playerName + ".prefix");
+		return prefix;
+	}
+	
+	public boolean hasSuffix(String playerName){
+		if(xm.getUsers().get().isSet("users." + playerName + ".suffix")){
+			return true;
+		}
+		return false;
+	}
+	
+	public String getSuffix(String playerName){
+		if(!hasPrefix(playerName)){
+			return null;
+		}
+		String suffix;
+		suffix = xm.getUsers().get().getString("users." + playerName + ".suffix");
+		return suffix;
 	}
 }

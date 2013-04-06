@@ -1,5 +1,19 @@
 package com.github.sebc722.xperms.core;
 
+/*
+ * ChangeLog:
+ *  - fixed ladder getting
+ *  - Added per player permissions
+ *  - Added per player prefixes
+ *  - Added per player suffixes
+ *  - Fixed order for permission setting
+ *  - Added commands to:
+ *    - Add/Remove prefix to/from player
+ *    - Add/Remove suffix to/from player
+ *    - Add/Remove permission to/from player
+ *  - improved command responses
+ */
+
 import java.util.HashMap;
 
 import org.bukkit.ChatColor;
@@ -10,10 +24,7 @@ import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.sebc722.xperms.config.*;
-import com.github.sebc722.xperms.permissions.Xgroup;
-import com.github.sebc722.xperms.permissions.Xpermissions;
-import com.github.sebc722.xperms.permissions.Xplayer;
-import com.github.sebc722.xperms.permissions.Xworld;
+import com.github.sebc722.xperms.permissions.*;
 
 public class Main extends JavaPlugin {
 	private String permissionsFileName = "permissions.yml";
@@ -45,7 +56,9 @@ public class Main extends JavaPlugin {
 			getLogger().warning("A global default group has not been defined! Please define one in permissions.yml");
 		}
 		
-		checkForUpdate();
+		if(allowedChecking("OnStart")){
+			checkForUpdate();
+		}
 	}
 	
 	public void onDisable(){
@@ -122,6 +135,14 @@ public class Main extends JavaPlugin {
 		for(int i = 0; i < files.length; i++){
 			saveResource(files[i], true);
 		}
+	}
+	
+	public boolean allowedChecking(String eventName){
+		if(getConfig().getString("CheckUpdate." + eventName).equals("true")){
+			return true;
+		}
+		
+		return false;
 	}
 	
 	public Yaml getPermissions(){
