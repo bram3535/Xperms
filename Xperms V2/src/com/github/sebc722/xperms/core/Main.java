@@ -1,19 +1,20 @@
 package com.github.sebc722.xperms.core;
 
 /*
- * ChangeLog:
- *  - fixed ladder getting
- *  - Added per player permissions
- *  - Added per player prefixes
- *  - Added per player suffixes
- *  - Fixed order for permission setting
- *  - Added commands to:
- *    - Add/Remove prefix to/from player
- *    - Add/Remove suffix to/from player
- *    - Add/Remove permission to/from player
- *  - improved command responses
+ * ToDo:
+ * - fix per-player permission setting(commands)
  */
 
+/*
+ * ChangeLog v2.3:
+ *  - Added Metrics
+ *  - Fixed start up errors
+ *  - Fixed errors when setting
+ *    player properties through 
+ *    commands
+ */
+
+import java.io.IOException;
 import java.util.HashMap;
 
 import org.bukkit.ChatColor;
@@ -25,15 +26,18 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.sebc722.xperms.config.*;
 import com.github.sebc722.xperms.permissions.*;
+import com.github.sebc722.xperms.metrics.*;
 
 public class Main extends JavaPlugin {
 	private String permissionsFileName = "permissions.yml";
 	private String usersFileName = "users.yml";
 	private String WebsiteURL = "http://dev.bukkit.org/server-mods/xperms";
 	
+	private Double currentVersion = 2.3;
+	
 	private Yaml permissionsFile = new Yaml(this, permissionsFileName);
 	private Yaml usersFile = new Yaml(this, usersFileName);
-	private ConfigChecker cc = new ConfigChecker(this);
+	private ConfigChecker cc = new ConfigChecker(this, currentVersion);
 	
 	private Xgroup groupMethods = new Xgroup(this);
 	private Xplayer playerMethods = new Xplayer(this);
@@ -51,6 +55,17 @@ public class Main extends JavaPlugin {
 		saveDefaultConfig();
 		reloadAll();
 		cc.checkConfigFiles();
+		
+		if(statsAllowed()){
+			Metrics metrics;
+			try {
+				metrics = new Metrics(this);
+				metrics.start();
+				getLogger().info("Stats collection started succesfully");
+			} catch (IOException e) {
+				getLogger().warning("Stats collection start up has failed");
+			}
+		}
 		
 		if(!haveDefault()){
 			getLogger().warning("A global default group has not been defined! Please define one in permissions.yml");
@@ -92,7 +107,7 @@ public class Main extends JavaPlugin {
 	}
 	
 	private void checkForUpdate(){
-		if(new UpdateChecker(this).Check()){
+		if(new UpdateChecker(this, currentVersion).Check()){
 			getServer().getConsoleSender().sendMessage("[Xperms] " + ChatColor.DARK_GRAY + "An update is available for Xperms! download it here: " + ChatColor.GREEN + WebsiteURL);
 		}
 	}
@@ -137,6 +152,15 @@ public class Main extends JavaPlugin {
 		}
 	}
 	
+	public boolean statsAllowed(){
+		if(getConfig().isSet("CollectStats")){
+			if(getConfig().getString("CollectStats").equalsIgnoreCase("true")){
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public boolean allowedChecking(String eventName){
 		if(getConfig().getString("CheckUpdate." + eventName).equals("true")){
 			return true;
@@ -175,5 +199,9 @@ public class Main extends JavaPlugin {
 	
 	public HashMap<Player, String> getGroupMap(){
 		return groupsMap;
+	}
+	
+	public Double getVersion(){
+		return currentVersion;
 	}
 }

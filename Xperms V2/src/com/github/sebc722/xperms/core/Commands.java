@@ -76,7 +76,7 @@ public class Commands {
 			return;
 		}
 		if(key.equalsIgnoreCase("check")){
-			boolean update = new UpdateChecker(xm).Check();
+			boolean update = new UpdateChecker(xm, xm.getVersion()).Check();
 			if(update){
 				sender.sendMessage(DarkGrey + "An update is available for Xperms! download it here: " + ChatColor.GREEN + WebsiteURL);
 			}

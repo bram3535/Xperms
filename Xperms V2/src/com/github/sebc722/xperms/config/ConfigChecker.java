@@ -6,9 +6,14 @@ public class ConfigChecker {
 	private Main xm;
 	private Double currentVersion;
 	
-	public ConfigChecker(Main main){
+	public ConfigChecker(Main main, Double CV){
 		xm = main;
-		currentVersion = Double.parseDouble(xm.getDescription().getVersion());
+		
+		try{
+			currentVersion = Double.parseDouble(xm.getDescription().getVersion());
+		} catch(NullPointerException e){
+			currentVersion = CV;
+		}
 	}
 	
 	public void checkConfigFiles(){
@@ -21,6 +26,7 @@ public class ConfigChecker {
 	}
 	
 	private boolean isConfigUpToDate(){
+		
 		if(!xm.getConfig().isSet("ConfigVersion")){
 			return false;
 		}
@@ -60,6 +66,9 @@ public class ConfigChecker {
 		if(xm.getConfig().isSet("CheckUpdate.Onjoin")){
 			xm.getConfig().set("CheckUpdate.Onjoin", null);
 			xm.getConfig().set("CheckUpdate.OnJoin", "true");
+		}
+		if(!xm.getConfig().isSet("CollectStats")){
+			xm.getConfig().set("CollectStats", "true");
 		}
 		xm.saveConfig();
 	}

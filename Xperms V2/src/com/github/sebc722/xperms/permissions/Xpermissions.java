@@ -62,6 +62,9 @@ public class Xpermissions {
 	}
 	
 	public void updatePermissions(Player player){
+		if(player == null){
+			return;
+		}
 		String playerGroup = xm.getXplayer().getCurrentGroup(player);
 		
 		setPermissions(player, playerGroup);

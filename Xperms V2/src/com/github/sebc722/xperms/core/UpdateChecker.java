@@ -10,11 +10,16 @@ public class UpdateChecker {
 	private Main xm;
 	
 	private String masterVersion;
-	private String currentVersion;
+	private Double currentVersion;
 	
-	public UpdateChecker(Main main){
+	public UpdateChecker(Main main, Double CV){
 		xm = main;
-		currentVersion = xm.getDescription().getVersion();
+		
+		try{
+			currentVersion = Double.parseDouble(xm.getDescription().getVersion());
+		} catch(NullPointerException e){
+			currentVersion = CV;
+		}
 	}
 	
 	public boolean Check(){
@@ -24,7 +29,7 @@ public class UpdateChecker {
 	
 	public boolean compareVersions(){
 		Double version, master;
-		version = Double.parseDouble(currentVersion);
+		version = currentVersion;
 		master = Double.parseDouble(masterVersion);
 		if(version < master){
 			return true;
