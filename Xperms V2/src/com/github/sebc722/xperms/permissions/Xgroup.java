@@ -70,10 +70,10 @@ public class Xgroup {
 			String[] worldsSupported = xm.getPermissions().get().getStringList("groups." + group + ".worlds").toArray(new String[0]);
 			
 			for(int i = 0; i < worldsSupported.length; i++){
-				if(worldsSupported[i].equalsIgnoreCase(world)){
+				if(worldsSupported[i].equalsIgnoreCase(world)){			
 					return true;
 				}
-				if(worldsSupported[i].startsWith("-")){
+				if(worldsSupported[i].equalsIgnoreCase("-" + world)){
 					return false;
 				}
 			}

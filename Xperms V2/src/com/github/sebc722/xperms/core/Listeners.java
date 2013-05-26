@@ -76,10 +76,18 @@ public class Listeners implements Listener{
 		if(xm.getXplayer().hasGroupForWorld(playerName, playerWorld)){
 			playerGroup = xm.getXplayer().getGroupForWorld(playerName, playerWorld);
 			xm.getXpermissions().setPermissions(player, playerGroup);
+			return;
 		}
 		else{
+			if(xm.getXgroup().isSupportedByWorld(xm.getXplayer().getCurrentGroup(player), playerWorld)){
+				playerGroup = xm.getXplayer().getCurrentGroup(player);
+				xm.getXpermissions().setPermissions(player, playerGroup);
+				return;
+			}
+			
 			playerGroup = xm.getXgroup().getDefault(playerWorld);
 			xm.getXpermissions().setPermissions(player, playerGroup);
+			return;
 		}
 	}
 	

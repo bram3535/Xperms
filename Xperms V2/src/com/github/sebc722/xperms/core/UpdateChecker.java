@@ -9,35 +9,28 @@ import java.net.URL;
 public class UpdateChecker {
 	private Main xm;
 	
-	private String masterVersion;
+	private Double masterVersion;
 	private Double currentVersion;
 	
 	public UpdateChecker(Main main, Double CV){
 		xm = main;
 		
-		try{
-			currentVersion = Double.parseDouble(xm.getDescription().getVersion());
-		} catch(NullPointerException e){
-			currentVersion = CV;
-		}
+		currentVersion = CV;
 	}
 	
 	public boolean Check(){
-		checkUpdate();
+		getVersion();
 		return compareVersions();
 	}
 	
 	public boolean compareVersions(){
-		Double version, master;
-		version = currentVersion;
-		master = Double.parseDouble(masterVersion);
-		if(version < master){
+		if(currentVersion < masterVersion){
 			return true;
 		}
 		return false;
 	}
 	
-	public void checkUpdate(){
+	public void getVersion(){
 		URL versionURL;
 		try {
 			versionURL = new URL("https://dl.dropbox.com/u/63465675/Bukkit/Xperms/XpermsCurrentVersion.txt");
@@ -49,13 +42,14 @@ public class UpdateChecker {
 		BufferedReader in;
 		try {
 			in = new BufferedReader(new InputStreamReader(versionURL.openStream()));
+			
 			String line;
-			while((line = in.readLine()) != null){
-				String[] sublist = line.split("=");
-				if(sublist[0].equalsIgnoreCase("version")){
-					masterVersion = sublist[1];
-				}
+			line = in.readLine();
+			String[] sublist = line.split("=");
+			if(sublist[0].equalsIgnoreCase("version")){
+				masterVersion = Double.parseDouble(sublist[1]);
 			}
+			
 		} catch (IOException e) {
 			xm.getLogger().info("Failed to read master version file, this is probably nothing to worry about");
 		}

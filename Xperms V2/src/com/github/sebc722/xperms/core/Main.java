@@ -1,17 +1,12 @@
 package com.github.sebc722.xperms.core;
 
 /*
- * ToDo:
- * - fix per-player permission setting(commands)
- */
-
-/*
- * ChangeLog v2.3:
- *  - Added Metrics
- *  - Fixed start up errors
- *  - Fixed errors when setting
- *    player properties through 
- *    commands
+ * ChangeLog v2.4:
+ *  - Added dynamic world handling
+ *    - when a player joins a new world not encountered before
+ *      Xperms will now check to see if the player's current
+ *      group is compatible in the new world, if so, it will
+ *      carry over
  */
 
 import java.io.IOException;
@@ -33,7 +28,7 @@ public class Main extends JavaPlugin {
 	private String usersFileName = "users.yml";
 	private String WebsiteURL = "http://dev.bukkit.org/server-mods/xperms";
 	
-	private Double currentVersion = 2.3;
+	private Double currentVersion = 2.4;
 	
 	private Yaml permissionsFile = new Yaml(this, permissionsFileName);
 	private Yaml usersFile = new Yaml(this, usersFileName);
